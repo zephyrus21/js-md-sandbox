@@ -64,6 +64,15 @@ function App() {
       <CodeEditor
         initialValue='// Hello World
 '
+
+
+
+
+
+
+
+
+
         onChange={(value) => setInput(value)}
       />
       <textarea
