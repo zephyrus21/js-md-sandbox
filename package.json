@@ -12,6 +12,7 @@
     "esbuild": "^0.12.1",
     "esbuild-wasm": "0.8.27",
     "localforage": "^1.9.0",
+    "monaco-editor": "^0.24.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },
