@@ -1,4 +1,3 @@
-import 'bulmaswatch/darkly/bulmaswatch.min.css';
 import React, { useRef } from 'react';
 import MonacoEditor from '@monaco-editor/react';
 import prettier from 'prettier';
