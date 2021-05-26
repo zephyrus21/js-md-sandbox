@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as esbuild from 'esbuild-wasm';
 import { unpkgPathPlugin, fetchPlugin } from './plugins';
+import CodeEditor from './components/code-editor';
 
 function App() {
   const ref = useRef<any>();
@@ -14,10 +15,16 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    startService();
+  }, []);
+
   const onClick = async () => {
     if (!ref.current) {
       return;
     }
+    iframe.current.srcdoc = html;
+
     const result = await ref.current.build({
       entryPoints: ['index.js'],
       bundle: true,
@@ -31,10 +38,6 @@ function App() {
 
     iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*');
   };
-
-  useEffect(() => {
-    startService();
-  }, []);
 
   const html = `
     <html>
@@ -58,6 +61,7 @@ function App() {
 
   return (
     <div>
+      <CodeEditor />
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}></textarea>
