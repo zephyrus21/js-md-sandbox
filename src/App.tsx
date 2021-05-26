@@ -61,7 +61,11 @@ function App() {
 
   return (
     <div>
-      <CodeEditor />
+      <CodeEditor
+        initialValue='// Hello World
+'
+        onChange={(value) => setInput(value)}
+      />
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}></textarea>

@@ -1,15 +1,27 @@
 import React from 'react';
 import MonacoEditor from '@monaco-editor/react';
 
-const CodeEditor = () => {
+interface CodeEditorProps {
+  initialValue: string;
+  onChange(value: string): void;
+}
+
+const CodeEditor: React.FC<CodeEditorProps> = ({ onChange, initialValue }) => {
+  const onEditorDidMount = (value: any, event: any) => {
+    onChange(value);
+  };
+
   return (
     <MonacoEditor
-      height='500px'
-      language='javascript'
+      onChange={onEditorDidMount}
+      value={initialValue}
       theme='vs-dark'
+      language='javascript'
+      height='500px'
       options={{
         wordWrap: 'on',
         minimap: { enabled: false },
+        showUnused: false,
         folding: false,
         lineNumbersMinChars: 3,
         fontSize: 16,
