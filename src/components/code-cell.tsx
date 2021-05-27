@@ -14,17 +14,16 @@ function CodeCell() {
 
   return (
     <Resizable direction='vertical'>
-      <CodeEditor
-        initialValue='// Hello World
-'
-        onChange={(value) => setInput(value)}
-      />
-      <div>
-        <button className='button  is-success is-small' onClick={onClick}>
-          Submit
-        </button>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'row' }}>
+        <Resizable direction='horizontal'>
+          <CodeEditor
+            initialValue='// Hello World
+          '
+            onChange={(value) => setInput(value)}
+          />
+        </Resizable>
+        <Preview code={code} />
       </div>
-      <Preview code={code} />
     </Resizable>
   );
 }
