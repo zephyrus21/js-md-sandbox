@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CodeEditor from './code-editor';
+import Resizable from './resizable';
 import Preview from './preview';
 import bundle from '../bundler';
 
@@ -12,7 +13,7 @@ function CodeCell() {
   };
 
   return (
-    <div>
+    <Resizable direction='vertical'>
       <CodeEditor
         initialValue='// Hello World
 '
@@ -24,7 +25,7 @@ function CodeCell() {
         </button>
       </div>
       <Preview code={code} />
-    </div>
+    </Resizable>
   );
 }
 
