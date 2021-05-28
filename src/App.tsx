@@ -1,5 +1,5 @@
 import React from 'react';
-// import CodeCell from './components/code-cell';
+import CodeCell from './components/code-cell';
 import 'bulmaswatch/darkly/bulmaswatch.min.css';
 import TextEditor from './components/text-editor';
 
