@@ -5,3 +5,5 @@ export interface Cell {
   type: CellTypes;
   content: string;
 }
+
+export type DirectionTypes = 'up' | 'down';
