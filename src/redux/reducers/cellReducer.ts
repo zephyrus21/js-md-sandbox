@@ -23,23 +23,22 @@ const initialState: CellState = {
 const cellReducer = produce(
   (state: CellState = initialState, action: Action) => {
     switch (action.type) {
-      case ActionType.UPDATE_CELL: {
+      case ActionType.UPDATE_CELL:
         const { id, content } = action.payload;
 
         state.data[id].content = content;
-        return state;
-      }
 
-      case ActionType.DELETE_CELL: {
+        return state;
+
+      case ActionType.DELETE_CELL:
         delete state.data[action.payload];
         state.order = state.order.filter((id) => id !== action.payload);
 
         return state;
-      }
 
-      case ActionType.MOVE_CELL: {
-        const { id, direction } = action.payload;
-        const index = state.order.findIndex((x) => x === id);
+      case ActionType.MOVE_CELL:
+        const { direction } = action.payload;
+        const index = state.order.findIndex((x) => x === action.payload.id);
         const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
         if (targetIndex > state.order.length || targetIndex < 0) return state;
@@ -48,9 +47,8 @@ const cellReducer = produce(
         state.order[targetIndex] = action.payload.id;
 
         return state;
-      }
 
-      case ActionType.INSERT_CELL_BEFORE: {
+      case ActionType.INSERT_CELL_BEFORE:
         const cell: Cell = {
           id: randomId(),
           type: action.payload.type,
@@ -59,13 +57,12 @@ const cellReducer = produce(
 
         state.data[cell.id] = cell;
 
-        const index = state.order.findIndex((x) => x === action.payload.id);
+        const indexNew = state.order.findIndex((x) => x === action.payload.id);
 
-        if (index < 0) state.order.push(cell.id);
-        else state.order.splice(index, 0, cell.id);
+        if (indexNew < 0) state.order.push(cell.id);
+        else state.order.splice(indexNew, 0, cell.id);
 
         return state;
-      }
 
       default:
         return state;

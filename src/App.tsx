@@ -2,16 +2,14 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import { store } from './redux';
-import CodeCell from './components/code-cell';
-import TextEditor from './components/text-editor';
 import 'bulmaswatch/darkly/bulmaswatch.min.css';
+import CellList from './components/cell-list';
 
 function App() {
   return (
     <Provider store={store}>
       <div>
-        {/* <CodeCell /> */}
-        <TextEditor />
+        <CellList />
       </div>
     </Provider>
   );
