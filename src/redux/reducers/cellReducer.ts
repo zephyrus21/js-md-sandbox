@@ -1,6 +1,8 @@
+import produce from 'immer';
+
 import { ActionType } from '../action-types';
 import { Action } from '../actions';
-import { Cell, CellTypes } from '../constants';
+import { Cell } from '../constants';
 
 interface CellState {
   loading: boolean;
@@ -18,37 +20,59 @@ const initialState: CellState = {
   data: {},
 };
 
-const cellReducer = (
-  state: CellState = initialState,
-  action: Action
-): CellState => {
-  switch (action.type) {
-    case ActionType.MOVE_CELL:
-      return state;
+const cellReducer = produce(
+  (state: CellState = initialState, action: Action) => {
+    switch (action.type) {
+      case ActionType.UPDATE_CELL: {
+        const { id, content } = action.payload;
 
-    case ActionType.DELETE_CELL:
-      return state;
+        state.data[id].content = content;
+        return state;
+      }
 
-    case ActionType.INSERT_CELL_BEFORE:
-      return state;
+      case ActionType.DELETE_CELL: {
+        delete state.data[action.payload];
+        state.order = state.order.filter((id) => id !== action.payload);
 
-    case ActionType.UPDATE_CELL:
-      const { id, content } = action.payload;
+        return state;
+      }
 
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          [id]: {
-            ...state.data[id],
-            content: content,
-          },
-        },
-      };
+      case ActionType.MOVE_CELL: {
+        const { id, direction } = action.payload;
+        const index = state.order.findIndex((x) => x === id);
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
-    default:
-      return state;
+        if (targetIndex > state.order.length || targetIndex < 0) return state;
+
+        state.order[index] = state.order[targetIndex];
+        state.order[targetIndex] = action.payload.id;
+
+        return state;
+      }
+
+      case ActionType.INSERT_CELL_BEFORE: {
+        const cell: Cell = {
+          id: randomId(),
+          type: action.payload.type,
+          content: '',
+        };
+
+        state.data[cell.id] = cell;
+
+        const index = state.order.findIndex((x) => x === action.payload.id);
+
+        if (index < 0) state.order.push(cell.id);
+        else state.order.splice(index, 0, cell.id);
+
+        return state;
+      }
+
+      default:
+        return state;
+    }
   }
-};
+);
+
+const randomId = () => Math.random().toString(36).substr(2, 5);
 
 export default cellReducer;
