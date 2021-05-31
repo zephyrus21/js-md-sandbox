@@ -10,13 +10,14 @@
 
 .btn-visible {
   opacity: 1;
+  margin-top: 20px;
 }
 
 .add-cell .divider {
   position: absolute;
   top: 50%;
   bottom: 50%;
-  border-bottom: 1px solid gray;
+  border-bottom: 4px solid rgba(128, 128, 128, 0.3);
   width: 95%;
   z-index: -1;
 }
