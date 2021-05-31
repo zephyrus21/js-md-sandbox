@@ -1,0 +1,10 @@
+.item {
+  position: relative;
+  margin: 20px 10px;
+}
+
+.action-bar-wrapper {
+  height: 50px;
+  width: 100%;
+  background-color: #2a2f35;
+}

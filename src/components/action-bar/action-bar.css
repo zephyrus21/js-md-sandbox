@@ -1,0 +1,15 @@
+.action-bar {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  z-index: 10;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  display: flex;
+  gap: 10px;
+  margin-right: 8px;
+}
+
+.action-bar:hover {
+  opacity: 1;
+}
