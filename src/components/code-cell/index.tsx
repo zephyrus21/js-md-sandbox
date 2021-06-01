@@ -5,6 +5,7 @@ import Preview from '../preview';
 import { Cell } from '../../redux';
 import { useActions } from '../../hooks/use-action';
 import { useTypedSelector } from '../../hooks/use-typed-selector';
+import './code-cell.css';
 
 interface CodeCellProps {
   cell: Cell;
@@ -12,18 +13,36 @@ interface CodeCellProps {
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions();
+
   const bundle = useTypedSelector((state) => state.bundle[cell.id]);
-  console.log(bundle);
+
+  const cumulativeCode = useTypedSelector((state) => {
+    const { data, order } = state.cell;
+    const orderCells = order.map((id) => data[id]);
+    const cumulativeCodeArray = [];
+
+    for (let c of orderCells) {
+      if (c.type === 'code') cumulativeCodeArray.push(c.content);
+      if (c.id === cell.id) break;
+    }
+
+    return cumulativeCodeArray;
+  });
 
   useEffect(() => {
+    if (!bundle) {
+      createBundle(cell.id, cumulativeCode.join('\n'));
+      return;
+    }
+
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content);
+      createBundle(cell.id, cumulativeCode.join('\n'));
     }, 750);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [cell.id, cell.content]);
+  }, [cell.id, cumulativeCode.join('\n')]);
 
   return (
     <Resizable direction='vertical'>
@@ -39,7 +58,15 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
             onChange={(value) => updateCell(cell.id, value)}
           />
         </Resizable>
-        {/* <Preview code={code} error={error} /> */}
+        {!bundle || bundle.loading ? (
+          <div className='progress-cover'>
+            <progress className='progress is-small is-success' max='100'>
+              Loading
+            </progress>
+          </div>
+        ) : (
+          <Preview code={bundle.code} error={bundle.error} />
+        )}
       </div>
     </Resizable>
   );
