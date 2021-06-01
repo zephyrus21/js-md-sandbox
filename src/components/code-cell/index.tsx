@@ -4,7 +4,7 @@ import Resizable from '../resizable';
 import Preview from '../preview';
 import { Cell } from '../../redux';
 import { useActions } from '../../hooks/use-action';
-import { useTypedSelector } from '../../hooks/use-typed-selector';
+import { useTypedSelector, useCumulativeCode } from '../../hooks';
 import './code-cell.css';
 
 interface CodeCellProps {
@@ -16,33 +16,22 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
 
   const bundle = useTypedSelector((state) => state.bundle[cell.id]);
 
-  const cumulativeCode = useTypedSelector((state) => {
-    const { data, order } = state.cell;
-    const orderCells = order.map((id) => data[id]);
-    const cumulativeCodeArray = [];
-
-    for (let c of orderCells) {
-      if (c.type === 'code') cumulativeCodeArray.push(c.content);
-      if (c.id === cell.id) break;
-    }
-
-    return cumulativeCodeArray;
-  });
+  const cumulativeCode = useCumulativeCode(cell.id);
 
   useEffect(() => {
     if (!bundle) {
-      createBundle(cell.id, cumulativeCode.join('\n'));
+      createBundle(cell.id, cumulativeCode);
       return;
     }
 
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cumulativeCode.join('\n'));
+      createBundle(cell.id, cumulativeCode);
     }, 750);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [cell.id, cumulativeCode.join('\n')]);
+  }, [cell.id, cumulativeCode]);
 
   return (
     <Resizable direction='vertical'>
