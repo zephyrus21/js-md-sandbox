@@ -12,12 +12,7 @@ export const serveCommand = new Command()
   .action(async (filename = 'sandbox.js', options: { port: string }) => {
     try {
       const dir = path.join(process.cwd(), path.dirname(filename));
-      await serve(
-        parseInt(options.port),
-        path.basename(filename),
-        dir,
-        isProduction
-      );
+      await serve(parseInt(options.port), path.basename(filename), dir, true);
       console.log(
         `Opened ${filename}. Navigate to http://localhost:${options.port} to edit the file`
       );
