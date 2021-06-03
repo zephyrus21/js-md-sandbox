@@ -3,7 +3,9 @@ import { useTypedSelector } from './use-typed-selector';
 export const useCumulativeCode = (cellId: string) => {
   //! to execute all code cell as one
   return useTypedSelector((state) => {
+    // @ts-ignore
     const { data, order } = state.cell;
+    // @ts-ignore
     const orderCells = order.map((id) => data[id]);
 
     const showFunc = `
