@@ -8,12 +8,16 @@ const CellList: React.FC = () => {
   const cell = useTypedSelector(({ cell }) =>
     cell?.order.map((id) => cell.data[id])
   );
+  //! Uncomment for production
+  // const { fetchCells, saveCells } = useActions();
 
-  const { fetchCells } = useActions();
+  // useEffect(() => {
+  //   fetchCells();
+  // }, []);
 
-  useEffect(() => {
-    fetchCells();
-  }, []);
+  // useEffect(() => {
+  //   saveCells();
+  // }, [JSON.stringify(cell)]);
 
   const renderedCell = cell?.map((c) => (
     <React.Fragment key={c.id}>
