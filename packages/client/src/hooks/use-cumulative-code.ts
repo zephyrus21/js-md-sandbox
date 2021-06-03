@@ -2,11 +2,9 @@ import { useTypedSelector } from './use-typed-selector';
 
 export const useCumulativeCode = (cellId: string) => {
   //! to execute all code cell as one
-  return useTypedSelector((state) => {
-    // @ts-ignore
-    const { data, order } = state.cell;
-    // @ts-ignore
-    const orderCells = order.map((id) => data[id]);
+  return useTypedSelector(({ cell }) => {
+    let orderCells;
+    if (cell) orderCells = cell.order.map((id) => cell.data[id]);
 
     const showFunc = `
       var show = (value) => {
@@ -27,14 +25,15 @@ export const useCumulativeCode = (cellId: string) => {
     const showFuncNo = `var show = () => {}`;
 
     const cumulativeCodeArray = [];
-
-    for (let c of orderCells) {
-      if (c.type === 'code') {
-        if (c.id === cellId) cumulativeCodeArray.push(showFunc);
-        else cumulativeCodeArray.push(showFuncNo);
-        cumulativeCodeArray.push(c.content);
+    if (orderCells) {
+      for (let c of orderCells) {
+        if (c.type === 'code') {
+          if (c.id === cellId) cumulativeCodeArray.push(showFunc);
+          else cumulativeCodeArray.push(showFuncNo);
+          cumulativeCodeArray.push(c.content);
+        }
+        if (c.id === cellId) break;
       }
-      if (c.id === cellId) break;
     }
 
     return cumulativeCodeArray;

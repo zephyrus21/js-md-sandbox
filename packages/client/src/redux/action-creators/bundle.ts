@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { ActionType } from '../action-types';
-import { Action, BundleStartAction, BundleCompleteAction } from '../actions';
+import { Action } from '../actions';
 import bundle from '../../bundler';
 
 export const createBundle = (id: string, input: string) => {

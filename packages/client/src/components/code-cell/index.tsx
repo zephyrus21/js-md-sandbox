@@ -13,8 +13,9 @@ interface CodeCellProps {
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions();
-  // @ts-ignore
-  const bundle = useTypedSelector((state) => state.bundle[cell.id]);
+  const bundle = useTypedSelector(({ bundle }) => {
+    if (bundle) return bundle[cell.id];
+  });
 
   const cumulativeCode = useCumulativeCode(cell.id);
 

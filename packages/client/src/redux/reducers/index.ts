@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { BundleReducer } from './bundleReducer';
+import BundleReducer from './bundleReducer';
 import cellReducer from './cellReducer';
 
 const reducers = combineReducers({
