@@ -7,7 +7,17 @@ export const serveCommand = new Command()
   .command('serve [filename]')
   .description('Open a file for editing')
   .option('-p, --port <number>', 'port to run server', '4000')
-  .action((filename = 'sandbox.js', options: { port: string }) => {
-    const dir = path.join(process.cwd(), path.dirname(filename));
-    serve(parseInt(options.port), path.basename(filename), dir);
+  .action(async (filename = 'sandbox.js', options: { port: string }) => {
+    try {
+      const dir = path.join(process.cwd(), path.dirname(filename));
+      await serve(parseInt(options.port), path.basename(filename), dir);
+      console.log(
+        `Opened ${filename}. Navigate to http://localhost:${options.port} to edit the file`
+      );
+    } catch (err) {
+      if (err.code === 'EADDRINUSE')
+        console.log('Port already in use. Try other ports.');
+      else console.log('Something went wrong.', err.message);
+      process.exit(1);
+    }
   });
